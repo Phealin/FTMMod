@@ -1,8 +1,12 @@
 package phealin.mod.models;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelHorse;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.AbstractHorse;
+import net.minecraft.util.math.MathHelper;
 
 /**
  * ModelHorse - Either Mojang or a mod author
@@ -32,6 +36,8 @@ public class ModelCentaur extends ModelBase {
     public ModelRenderer villagerArms2;
     public ModelRenderer villagerBody0;
     public ModelRenderer villagerHeadChild;
+    protected float childYOffset = 18.0F;
+    protected float childZOffset = 4.0F;
 
     public ModelCentaur() {
         this.textureWidth = 128;
@@ -79,7 +85,7 @@ public class ModelCentaur extends ModelBase {
         this.backLeftHoof.setRotationPoint(4.0F, 16.0F, 11.0F);
         this.backLeftHoof.addBox(-2.5F, 5.099999904632568F, -2.0F, 4, 3, 4, 2.384185791015625E-7F);
         this.villagerHead = new ModelRenderer(this, 0, 68);
-        this.villagerHead.setRotationPoint(-4.0F, -20.0F, -10.5F);
+        this.villagerHead.setRotationPoint(-4.0F, -19.5F, -10.5F);
         this.villagerHead.addBox(0.0F, 0.0F, 0.0F, 8, 10, 8, 0.0F);
         this.villagerArms2 = new ModelRenderer(this, 40, 120);
         this.villagerArms2.setRotationPoint(-4.0F, -6.0F, -11.0F);
@@ -115,29 +121,62 @@ public class ModelCentaur extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.frontRightLeg.render(f5);
-        this.backRightHoof.render(f5);
-        this.villagerArms0.render(f5);
-        this.body.render(f5);
-        this.villagerBody0.render(f5);
-        this.frontLeftHoof.render(f5);
-        this.backLeftLeg.render(f5);
-        this.frontRightShin.render(f5);
-        this.tailBase.render(f5);
-        this.frontRightHoof.render(f5);
-        this.tailTip.render(f5);
-        this.backLeftHoof.render(f5);
-        this.villagerHead.render(f5);
-        this.villagerArms2.render(f5);
-        this.backLeftShin.render(f5);
-        this.villagerBody1.render(f5);
-        this.backRightShin.render(f5);
-        this.backRightLeg.render(f5);
-        this.frontLeftLeg.render(f5);
-        this.frontLeftShin.render(f5);
-        this.tailMiddle.render(f5);
-        this.villagerArms0_1.render(f5);
+    public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) { 
+    	this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
+
+        if (this.isChild)
+        {
+            float f = 2.0F;
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(0F, this.childYOffset * scale, this.childZOffset * scale);
+            
+            GlStateManager.popMatrix();
+            GlStateManager.pushMatrix();
+            GlStateManager.scale(0.5F, 0.5F, 0.5F);
+            GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
+            this.villagerHead.render(scale);
+            this.body.render(scale);
+            this.villagerBody0.render(scale);
+            this.villagerBody1.render(scale);
+            this.villagerArms0.render(scale);
+            this.villagerArms0_1.render(scale);
+            this.villagerArms2.render(scale);
+            this.frontRightLeg.render(scale);
+            this.frontLeftLeg.render(scale);
+            this.backRightLeg.render(scale);
+            this.backLeftLeg.render(scale);
+            this.frontRightShin.render(scale);
+            this.frontLeftShin.render(scale);
+            this.backRightShin.render(scale);
+            this.backLeftShin.render(scale);
+            this.frontRightHoof.render(scale);
+            this.frontLeftHoof.render(scale);
+            this.backRightHoof.render(scale);
+            this.backLeftHoof.render(scale);
+            GlStateManager.popMatrix();
+        }
+        else
+        {
+            this.villagerHead.render(scale);
+            this.body.render(scale);
+            this.villagerBody0.render(scale);
+            this.villagerBody1.render(scale);
+            this.villagerArms0.render(scale);
+            this.villagerArms0_1.render(scale);
+            this.villagerArms2.render(scale);
+            this.frontRightLeg.render(scale);
+            this.frontLeftLeg.render(scale);
+            this.backRightLeg.render(scale);
+            this.backLeftLeg.render(scale);
+            this.frontRightShin.render(scale);
+            this.frontLeftShin.render(scale);
+            this.backRightShin.render(scale);
+            this.backLeftShin.render(scale);
+            this.frontRightHoof.render(scale);
+            this.frontLeftHoof.render(scale);
+            this.backRightHoof.render(scale);
+            this.backLeftHoof.render(scale);
+        }
     }
 
     /**
@@ -147,5 +186,52 @@ public class ModelCentaur extends ModelBase {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
+    }
+    
+    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
+    {    	
+    	AbstractHorse abstracthorse = (AbstractHorse)entityIn;
+    	float f6 = abstracthorse.getRearingAmount(ageInTicks);
+        float f7 = 1.0F - f6;
+    	float f9 = (float)entityIn.ticksExisted + ageInTicks;
+        float f10 = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI);
+        float f11 = f10 * 0.8F * limbSwingAmount;
+    	float f12 = 0.2617994F * f6;
+        float f13 = MathHelper.cos(f9 * 0.6F + (float)Math.PI);
+    	float f14 = (-1.0471976F + f13) * f6 + f11 * f7;
+        float f15 = (-1.0471976F - f13) * f6 + -f11 * f7;
+    	
+        this.frontLeftLeg.rotationPointY = -2.0F * f6 + 9.0F * f7;
+        this.frontLeftLeg.rotationPointZ = -2.0F * f6 + -8.0F * f7;
+        this.frontRightLeg.rotationPointY = this.frontLeftLeg.rotationPointY;
+        this.frontRightLeg.rotationPointZ = this.frontLeftLeg.rotationPointZ;
+        this.backLeftShin.rotationPointY = this.backLeftLeg.rotationPointY + MathHelper.sin(((float)Math.PI / 2F) + f12 + f7 * -f10 * 0.5F * limbSwingAmount) * 7.0F;
+        this.backLeftShin.rotationPointZ = this.backLeftLeg.rotationPointZ + MathHelper.cos(-((float)Math.PI / 2F) + f12 + f7 * -f10 * 0.5F * limbSwingAmount) * 7.0F;
+        this.backRightShin.rotationPointY = this.backRightLeg.rotationPointY + MathHelper.sin(((float)Math.PI / 2F) + f12 + f7 * f10 * 0.5F * limbSwingAmount) * 7.0F;
+        this.backRightShin.rotationPointZ = this.backRightLeg.rotationPointZ + MathHelper.cos(-((float)Math.PI / 2F) + f12 + f7 * f10 * 0.5F * limbSwingAmount) * 7.0F;
+        this.frontLeftShin.rotationPointY = this.frontLeftLeg.rotationPointY + MathHelper.sin(((float)Math.PI / 2F) + f14) * 7.0F;
+        this.frontLeftShin.rotationPointZ = this.frontLeftLeg.rotationPointZ + MathHelper.cos(-((float)Math.PI / 2F) + f14) * 7.0F;
+        this.frontRightShin.rotationPointY = this.frontRightLeg.rotationPointY + MathHelper.sin(((float)Math.PI / 2F) + f15) * 7.0F;
+        this.frontRightShin.rotationPointZ = this.frontRightLeg.rotationPointZ + MathHelper.cos(-((float)Math.PI / 2F) + f15) * 7.0F;
+        this.backLeftLeg.rotateAngleX = f12 + -f10 * 0.5F * limbSwingAmount * f7;
+        this.backLeftShin.rotateAngleX = -0.08726646F * f6 + (-f10 * 0.5F * limbSwingAmount - Math.max(0.0F, f10 * 0.5F * limbSwingAmount)) * f7;
+        this.backLeftHoof.rotateAngleX = this.backLeftShin.rotateAngleX;
+        this.backRightLeg.rotateAngleX = f12 + f10 * 0.5F * limbSwingAmount * f7;
+        this.backRightShin.rotateAngleX = -0.08726646F * f6 + (f10 * 0.5F * limbSwingAmount - Math.max(0.0F, -f10 * 0.5F * limbSwingAmount)) * f7;
+        this.backRightHoof.rotateAngleX = this.backRightShin.rotateAngleX;
+        this.frontLeftLeg.rotateAngleX = f14;
+        this.frontLeftShin.rotateAngleX = (this.frontLeftLeg.rotateAngleX + (float)Math.PI * Math.max(0.0F, 0.2F + f13 * 0.2F)) * f6 + (f11 + Math.max(0.0F, f10 * 0.5F * limbSwingAmount)) * f7;
+        this.frontLeftHoof.rotateAngleX = this.frontLeftShin.rotateAngleX;
+        this.frontRightLeg.rotateAngleX = f15;
+        this.frontRightShin.rotateAngleX = (this.frontRightLeg.rotateAngleX + (float)Math.PI * Math.max(0.0F, 0.2F - f13 * 0.2F)) * f6 + (-f11 + Math.max(0.0F, -f10 * 0.5F * limbSwingAmount)) * f7;
+        this.frontRightHoof.rotateAngleX = this.frontRightShin.rotateAngleX;
+        this.backLeftHoof.rotationPointY = this.backLeftShin.rotationPointY;
+        this.backLeftHoof.rotationPointZ = this.backLeftShin.rotationPointZ;
+        this.backRightHoof.rotationPointY = this.backRightShin.rotationPointY;
+        this.backRightHoof.rotationPointZ = this.backRightShin.rotationPointZ;
+        this.frontLeftHoof.rotationPointY = this.frontLeftShin.rotationPointY;
+        this.frontLeftHoof.rotationPointZ = this.frontLeftShin.rotationPointZ;
+        this.frontRightHoof.rotationPointY = this.frontRightShin.rotationPointY;
+        this.frontRightHoof.rotationPointZ = this.frontRightShin.rotationPointZ;
     }
 }

@@ -118,10 +118,6 @@ public class ModelWarthog extends ModelBase {
         this.head0.rotateAngleY = netHeadYaw * 0.017453292F;
         this.head1.rotateAngleX = headPitch * 0.017453292F;
         this.head1.rotateAngleY = netHeadYaw * 0.017453292F;
-        //this.tusk1.rotateAngleX = headPitch * 0.017453292F;
-        //this.tusk1.rotateAngleY = netHeadYaw * 0.017453292F;
-        //this.tusk3.rotateAngleX = headPitch * 0.017453292F;
-        //this.tusk3.rotateAngleY = netHeadYaw * 0.017453292F;
         this.body.rotateAngleX = ((float)Math.PI / 2F);
         this.leg1.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
         this.leg2.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
