@@ -1,0 +1,16 @@
+[
+{
+  "modid": "ftm",
+  "name": "Try Mod",
+  "description": "First attempt at Minecraft modding.",
+  "version": "${0.1}",
+  "mcversion": "${1.11.2}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Phealin"],
+  "credits": "Phealin",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"variant=violium":    { "model": "ftm:ore_overworld_violium" },
+		"variant=purporium":    { "model": "ftm:ore_overworld_purporium" }
+	}
+}
