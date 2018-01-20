@@ -1,4 +1,4 @@
-package phealin.mod.world.gen;
+package MortalKomcraft.mod.world.gen;
 
 import java.util.Random;
 
